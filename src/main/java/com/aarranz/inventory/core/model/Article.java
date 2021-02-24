@@ -47,25 +47,6 @@ public class Article {
     return stock >= requirement;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Article article = (Article) o;
-    return Objects.equals(id, article.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
-
-  private static void checkNameNotNull(String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("Name should not be null");
-    }
-  }
-
   private static void checkIdNotNull(String id) {
     if (id == null) {
       throw new IllegalArgumentException("Id should not be null");
@@ -87,6 +68,25 @@ public class Article {
   private void checkEnoughStockFor(int quantity) {
     if (!hasEnoughStockFor(quantity)) {
       throw new NotEnoughStockForaArticleException(id, quantity, stock);
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Article article = (Article) o;
+    return Objects.equals(id, article.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  private static void checkNameNotNull(String name) {
+    if (name == null) {
+      throw new IllegalArgumentException("Name should not be null");
     }
   }
 
