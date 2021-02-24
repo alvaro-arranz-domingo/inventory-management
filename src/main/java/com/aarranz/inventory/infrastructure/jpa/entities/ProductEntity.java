@@ -10,6 +10,6 @@ public class ProductEntity {
   @Id
   public String name;
 
-  @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "id.product", fetch = FetchType.EAGER)
   public Set<ProductArticlesEntity> productArticles;
 }

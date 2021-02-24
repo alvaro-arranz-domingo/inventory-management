@@ -4,20 +4,16 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ProductArticles")
+@AssociationOverrides({
+    @AssociationOverride(name = "id.article",
+        joinColumns = @JoinColumn(name = "idArticle")),
+    @AssociationOverride(name = "id.product",
+        joinColumns = @JoinColumn(name = "idProduct")) })
 public class ProductArticlesEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  public long id;
+  @EmbeddedId
+  public ProductArticlesId id;
 
   public int amount;
-
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "idArticle")
-  public ArticleEntity article;
-
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "idProduct")
-  public ProductEntity product;
 
 }
