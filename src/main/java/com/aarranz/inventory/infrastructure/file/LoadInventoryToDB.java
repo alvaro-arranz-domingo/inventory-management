@@ -12,10 +12,10 @@ import java.util.HashSet;
 @Component
 public class LoadInventoryToDB {
 
-  @Value(value = "${inventory.inventory-file}")
+  @Value(value = "${inventory.inventory-file:#{null}}")
   private String inventoryFile;
 
-  @Value(value = "${inventory.products-file}")
+  @Value(value = "${inventory.products-file:#{null}}")
   private String productsFile;
 
   @Autowired
