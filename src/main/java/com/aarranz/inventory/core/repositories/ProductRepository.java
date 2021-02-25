@@ -12,4 +12,6 @@ public interface ProductRepository {
   void saveAll(Set<Product> products);
 
   void save(Product product);
+
+  void clearAll();
 }

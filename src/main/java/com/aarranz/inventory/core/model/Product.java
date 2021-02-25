@@ -21,6 +21,14 @@ public class Product {
     return new Product(name, new HashSet<>(articles));
   }
 
+  public String name() {
+    return name;
+  }
+
+  public Set<ArticleRequirement> articlesRequired() {
+    return articles;
+  }
+
   public int stock() {
     var optMin = articles.stream()
         .map(ArticleRequirement::stockOfGroup)

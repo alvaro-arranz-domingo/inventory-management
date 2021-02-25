@@ -15,6 +15,14 @@ public class ArticleRequirement {
     this.amount = amount;
   }
 
+  public Article article() {
+    return article;
+  }
+
+  public int amount() {
+    return amount;
+  }
+
   public int stockOfGroup() {
     return Math.floorDiv(article.stock(), amount);
   }
