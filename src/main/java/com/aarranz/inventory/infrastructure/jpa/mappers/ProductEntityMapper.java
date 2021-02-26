@@ -27,7 +27,9 @@ public class ProductEntityMapper {
 
   private ProductArticlesEntity toEntity(ProductEntity productEntity, ArticleRequirement requirement) {
     var entity = new ProductArticlesEntity();
+    entity.id.productId = productEntity.name;
     entity.article = toEntity(requirement.article());
+    entity.id.articleId = entity.article.id;
     entity.product = productEntity;
     entity.amount = requirement.amount();
     return entity;

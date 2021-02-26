@@ -1,7 +1,5 @@
 package com.aarranz.inventory.infrastructure.jpa.entities;
 
-import com.aarranz.inventory.core.model.Article;
-
 import javax.persistence.*;
 
 @Entity
