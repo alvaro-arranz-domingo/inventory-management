@@ -27,6 +27,14 @@ public class ArticleRequirement {
     return Math.floorDiv(article.stock(), amount);
   }
 
+  public boolean hasStockFor(int quantity) {
+    return (quantity * amount) <= article.stock();
+  }
+
+  public void removeArticles(int quantity) {
+    article.reduceStockIn(quantity * amount);
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

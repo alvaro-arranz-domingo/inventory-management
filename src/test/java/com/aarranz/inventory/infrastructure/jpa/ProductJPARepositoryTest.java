@@ -39,7 +39,6 @@ class ProductJPARepositoryTest {
     var article1 = ArticleGroupMother.anyGroupWith("1", 5, 2);
     var article2 = ArticleGroupMother.anyGroupWith("2", 7, 3);
     var article3 = ArticleGroupMother.anyGroupWith("3", 8, 1);
-
     var product1 = ProductMother.anyProductWithArticles("product1", article1, article2);
     var product2 = ProductMother.anyProductWithArticles("product2", article2, article3);
     var allProducts = new HashSet<>(Arrays.asList(product1, product2));
@@ -47,6 +46,28 @@ class ProductJPARepositoryTest {
     products.saveAll(allProducts);
 
     assertEquals(2, springRepo.count());
+  }
+
+  @Test
+  public void findProductByName() {
+    var article1 = ArticleGroupMother.anyGroupWith("1", 5, 2);
+    var article2 = ArticleGroupMother.anyGroupWith("2", 7, 3);
+    var product1 = ProductMother.anyProductWithArticles("product1", article1, article2);
+    products.save(product1);
+
+    var product = products.findByName("product1");
+
+    assertNotNull(product);
+    assertTrue(product.isPresent());
+    assertEquals("product1", product.get().name());
+  }
+
+  @Test
+  public void findProductByNameNonexistent() {
+    var product = products.findByName("product2");
+
+    assertNotNull(product);
+    assertFalse(product.isPresent());
   }
 
   @AfterEach

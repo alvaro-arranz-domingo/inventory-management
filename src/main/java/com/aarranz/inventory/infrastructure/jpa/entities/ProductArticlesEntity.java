@@ -13,11 +13,11 @@ public class ProductArticlesEntity {
 
   public int amount;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @MapsId("productId")
   public ProductEntity product;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @MapsId("articleId")
   public ArticleEntity article;
 

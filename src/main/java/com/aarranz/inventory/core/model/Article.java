@@ -1,6 +1,6 @@
 package com.aarranz.inventory.core.model;
 
-import com.aarranz.inventory.core.model.exceptions.NotEnoughStockForaArticleException;
+import com.aarranz.inventory.core.model.exceptions.NotEnoughStockForArticleException;
 
 import java.util.Objects;
 
@@ -67,7 +67,7 @@ public class Article {
 
   private void checkEnoughStockFor(int quantity) {
     if (!hasEnoughStockFor(quantity)) {
-      throw new NotEnoughStockForaArticleException(id, quantity, stock);
+      throw new NotEnoughStockForArticleException();
     }
   }
 

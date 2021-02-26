@@ -1,10 +1,10 @@
 package com.aarranz.inventory.core.model;
 
+import com.aarranz.inventory.core.model.exceptions.NotEnoughStockForArticleException;
 import com.aarranz.inventory.mother.ArticleMother;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ArticleRequirementTest {
 
@@ -47,5 +47,54 @@ class ArticleRequirementTest {
     var group = new ArticleRequirement(article, 7);
 
     assertEquals(0, group.stockOfGroup());
+  }
+
+  @Test
+  public void hasStockFor() {
+    var article = ArticleMother.anyArticleWithStock(34);
+    var group = new ArticleRequirement(article, 10);
+
+    var hasStock = group.hasStockFor(3);
+
+    assertTrue(hasStock);
+  }
+
+  @Test
+  public void hasStockForExact() {
+    var article = ArticleMother.anyArticleWithStock(30);
+    var group = new ArticleRequirement(article, 10);
+
+    var hasStock = group.hasStockFor(3);
+
+    assertTrue(hasStock);
+  }
+
+  @Test
+  public void doNotHasStockFor() {
+    var article = ArticleMother.anyArticleWithStock(24);
+    var group = new ArticleRequirement(article, 10);
+
+    var hasStock = group.hasStockFor(3);
+
+    assertFalse(hasStock);
+  }
+
+  @Test
+  public void removeAmount() {
+    var article = ArticleMother.anyArticleWithStock(34);
+    var group = new ArticleRequirement(article, 10);
+
+    group.removeArticles(2);
+
+    assertEquals(14, group.article().stock());
+    assertEquals(1, group.stockOfGroup());
+  }
+
+  @Test
+  public void removeTooManyAmount() {
+    var article = ArticleMother.anyArticleWithStock(34);
+    var group = new ArticleRequirement(article, 10);
+
+    assertThrows(NotEnoughStockForArticleException.class, () -> group.removeArticles(4));
   }
 }

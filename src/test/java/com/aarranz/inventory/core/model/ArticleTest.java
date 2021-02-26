@@ -1,6 +1,6 @@
 package com.aarranz.inventory.core.model;
 
-import com.aarranz.inventory.core.model.exceptions.NotEnoughStockForaArticleException;
+import com.aarranz.inventory.core.model.exceptions.NotEnoughStockForArticleException;
 import com.aarranz.inventory.mother.ArticleMother;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +52,7 @@ class ArticleTest {
   public void articleReduceStockNotEnough() {
     var article = ArticleMother.anyArticleWithStock(4);
 
-    assertThrows(NotEnoughStockForaArticleException.class, () -> article.reduceStockIn(7));
+    assertThrows(NotEnoughStockForArticleException.class, () -> article.reduceStockIn(7));
   }
 
 }

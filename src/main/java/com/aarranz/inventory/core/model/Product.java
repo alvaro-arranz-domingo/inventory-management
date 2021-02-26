@@ -41,6 +41,14 @@ public class Product {
     return optMin.getAsInt();
   }
 
+  public boolean hasStockFor(int quantity) {
+    return !articlesRequired().stream().anyMatch(a -> !a.hasStockFor(quantity));
+  }
+
+  public void removeAmount(int quantity) {
+    articlesRequired().forEach(a -> a.removeArticles(quantity));
+  }
+
   private static void checkArticles(List<ArticleRequirement> articles) {
     if (articles == null
         || articles.size() == 0) {

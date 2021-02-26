@@ -8,6 +8,7 @@ import com.aarranz.inventory.infrastructure.jpa.springrepo.ProductCRUDRepoSpring
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -25,6 +26,11 @@ public class ProductJPARepository implements ProductRepository {
     this.mapper = mapper;
     this.productCRUDRepo = productCRUDRepo;
     this.articleCRUDRepo = articleCRUDRepo;
+  }
+
+  @Override
+  public Optional<Product> findByName(String name) {
+    return productCRUDRepo.findById(name).map(mapper::toDom);
   }
 
   @Override
