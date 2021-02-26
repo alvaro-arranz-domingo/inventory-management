@@ -1,6 +1,5 @@
 package com.aarranz.inventory.infrastructure.jpa;
 
-import com.aarranz.inventory.core.model.Product;
 import com.aarranz.inventory.infrastructure.jpa.springrepo.ProductCRUDRepoSpring;
 import com.aarranz.inventory.mother.ArticleGroupMother;
 import com.aarranz.inventory.mother.ProductMother;
@@ -31,6 +30,18 @@ class ProductJPARepositoryTest {
     products.save(product);
 
     assertEquals(1, springRepo.count());
+  }
+
+  @Test
+  public void updateProduct() {
+    products.save(ProductMother.anyProductWithArticles(
+        "product1",
+        ArticleGroupMother.anyGroupWith("1", 5, 2),
+        ArticleGroupMother.anyGroupWith("2", 7, 3)));
+    var product = products.findByName("product1").get();
+    product.removeAmount(1);
+
+    products.save(product);
   }
 
   @Test

@@ -4,6 +4,8 @@ import com.aarranz.inventory.core.model.Sell;
 import com.aarranz.inventory.core.model.exceptions.NotEnoughStockForArticleException;
 import com.aarranz.inventory.core.repositories.ProductRepository;
 import com.aarranz.inventory.core.repositories.SellRepository;
+import com.aarranz.inventory.infrastructure.transactional.DumbTransactionProvider;
+import com.aarranz.inventory.infrastructure.transactional.SpringTransactionProvider;
 import com.aarranz.inventory.mother.ArticleGroupMother;
 import com.aarranz.inventory.mother.ProductMother;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +29,7 @@ class SellProductUCTest {
   public void setUp() {
     products = mock(ProductRepository.class);
     sells = mock(SellRepository.class);
-    sellProductUC = new SellProductUC(products, sells);
+    sellProductUC = new SellProductUC(products, sells, new DumbTransactionProvider());
   }
 
   @Test
