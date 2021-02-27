@@ -4,6 +4,7 @@ import com.aarranz.inventory.core.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -30,8 +31,8 @@ public class LoadInventoryToDB {
         || productsFile == null)
       return;
 
-    var inventoryRes = new ClassPathResource(inventoryFile);
-    var productsRes = new ClassPathResource(productsFile);
+    var inventoryRes = new FileSystemResource(inventoryFile);
+    var productsRes = new FileSystemResource(productsFile);
 
     var products = loadInventoryFromFile.load(inventoryRes, productsRes);
 

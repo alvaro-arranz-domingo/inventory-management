@@ -23,7 +23,12 @@ public class InventoryApplication {
                                          LoadInventoryToDB loadInventoryToDB) throws IOException {
     return (args) -> {
       if (products.getAllProducts().isEmpty()) {
-        loadInventoryToDB.loadToDB();
+
+        try {
+          loadInventoryToDB.loadToDB();
+        } catch (Exception e) {
+          System.out.println(e.getMessage());
+        }
       }
     };
   }
