@@ -9,6 +9,7 @@ import com.aarranz.inventory.infrastructure.jpa.entities.ProductEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Component
 public class ProductEntityMapper {
@@ -16,7 +17,7 @@ public class ProductEntityMapper {
   public ProductEntity toEntity(Product product) {
     var entity = new ProductEntity();
     entity.name = product.name();
-    entity.productArticles = product.articlesRequired().stream().map(a -> toEntity(entity, a)).collect(Collectors.toSet());
+    entity.productArticles = StreamSupport.stream(product.articlesRequired().spliterator(), false).map(a -> toEntity(entity, a)).collect(Collectors.toSet());
     return entity;
   }
 

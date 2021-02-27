@@ -46,8 +46,8 @@ class SellProductUCTest {
     var sellCaptor = ArgumentCaptor.forClass(Sell.class);
     verify(products).save(product);
     verify(sells).save(sellCaptor.capture());
-    assertEquals(5, product.articlesRequired().stream().filter(a -> a.article().id().equals("1")).findFirst().get().article().stock());
-    assertEquals(7, product.articlesRequired().stream().filter(a -> a.article().id().equals("3")).findFirst().get().article().stock());
+    assertEquals(5, product.getStockOfArticleRequiredWithId("1").get());
+    assertEquals(7, product.getStockOfArticleRequiredWithId("3").get());
     assertEquals("product1", sell.productId());
     assertEquals(1, sell.amount());
     assertEquals(1, sellCaptor.getValue().amount());

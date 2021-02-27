@@ -2,6 +2,7 @@ package com.aarranz.inventory.core.model;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class Product {
@@ -25,7 +26,7 @@ public class Product {
     return name;
   }
 
-  public Set<ArticleRequirement> articlesRequired() {
+  public Iterable<ArticleRequirement> articlesRequired() {
     return articles;
   }
 
@@ -42,11 +43,15 @@ public class Product {
   }
 
   public boolean hasStockFor(int quantity) {
-    return !articlesRequired().stream().anyMatch(a -> !a.hasStockFor(quantity));
+    return !articles.stream().anyMatch(a -> !a.hasStockFor(quantity));
   }
 
   public void removeAmount(int quantity) {
     articlesRequired().forEach(a -> a.removeArticles(quantity));
+  }
+
+  public Optional<Integer> getStockOfArticleRequiredWithId(String articleId) {
+    return articles.stream().filter(a -> a.article().id().equals(articleId)).map(a -> a.article().stock()).findFirst();
   }
 
   private static void checkArticles(List<ArticleRequirement> articles) {
