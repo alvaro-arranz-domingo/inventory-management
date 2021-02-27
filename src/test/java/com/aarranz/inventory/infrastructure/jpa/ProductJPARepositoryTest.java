@@ -1,5 +1,6 @@
 package com.aarranz.inventory.infrastructure.jpa;
 
+import com.aarranz.inventory.core.model.ProductId;
 import com.aarranz.inventory.infrastructure.jpa.springrepo.ProductCRUDRepoSpring;
 import com.aarranz.inventory.mother.ArticleGroupMother;
 import com.aarranz.inventory.mother.ProductMother;
@@ -38,7 +39,7 @@ class ProductJPARepositoryTest {
         "product1",
         ArticleGroupMother.anyGroupWith("1", 5, 2),
         ArticleGroupMother.anyGroupWith("2", 7, 3)));
-    var product = products.findByName("product1").get();
+    var product = products.findByName(new ProductId("product1")).get();
     product.removeAmount(1);
 
     products.save(product);
@@ -66,16 +67,16 @@ class ProductJPARepositoryTest {
     var product1 = ProductMother.anyProductWithArticles("product1", article1, article2);
     products.save(product1);
 
-    var product = products.findByName("product1");
+    var product = products.findByName(new ProductId("product1"));
 
     assertNotNull(product);
     assertTrue(product.isPresent());
-    assertEquals("product1", product.get().name());
+    assertEquals("product1", product.get().name().value());
   }
 
   @Test
   public void findProductByNameNonexistent() {
-    var product = products.findByName("product2");
+    var product = products.findByName(new ProductId("product2"));
 
     assertNotNull(product);
     assertFalse(product.isPresent());

@@ -6,17 +6,17 @@ import java.util.Objects;
 
 public class Article {
 
-  private final String id;
+  private final ArticleId id;
   private final String name;
   private int stock;
 
-  public Article(String id, String name, int stock) {
+  public Article(ArticleId id, String name, int stock) {
     this.id = id;
     this.name = name;
     this.stock = stock;
   }
 
-  public static Article create(String id, String name, int stock) {
+  public static Article create(ArticleId id, String name, int stock) {
     checkStock(stock);
     checkIdNotNull(id);
     checkNameNotNull(name);
@@ -24,7 +24,7 @@ public class Article {
     return new Article(id, name, stock);
   }
 
-  public String id() {
+  public ArticleId id() {
     return id;
   }
 
@@ -47,7 +47,7 @@ public class Article {
     return stock >= requirement;
   }
 
-  private static void checkIdNotNull(String id) {
+  private static void checkIdNotNull(ArticleId id) {
     if (id == null) {
       throw new IllegalArgumentException("Id should not be null");
     }

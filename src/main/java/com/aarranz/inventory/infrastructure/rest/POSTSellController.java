@@ -1,5 +1,6 @@
 package com.aarranz.inventory.infrastructure.rest;
 
+import com.aarranz.inventory.core.model.ProductId;
 import com.aarranz.inventory.core.usecases.SellProductUC;
 import com.aarranz.inventory.infrastructure.rest.dto.SellDTO;
 import com.aarranz.inventory.infrastructure.rest.mapper.SellDTOMapper;
@@ -21,7 +22,7 @@ public class POSTSellController {
 
   @PostMapping(path = "/sell", produces = MediaType.APPLICATION_JSON_VALUE)
   public SellDTO sell(@RequestBody SellDTO sellRequest) {
-    var sell = useCase.sell(sellRequest.amount, sellRequest.productId);
+    var sell = useCase.sell(sellRequest.amount, new ProductId(sellRequest.productId));
     return mapper.toDTO(sell);
   }
 }

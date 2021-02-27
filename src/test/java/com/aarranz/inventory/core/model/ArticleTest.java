@@ -20,7 +20,7 @@ class ArticleTest {
 
   @Test
   public void articleShouldHaveName() {
-    assertThrows(IllegalArgumentException.class, () -> Article.create("anyId", null, 1));
+    assertThrows(IllegalArgumentException.class, () -> Article.create(new ArticleId("anyId"), null, 1));
   }
 
   @Test

@@ -8,7 +8,7 @@ class SellTest {
 
   @Test
   public void createSell() {
-    Sell.create("productId", 6);
+    Sell.create(new ProductId("productId"), 6);
   }
 
   @Test
@@ -18,11 +18,11 @@ class SellTest {
 
   @Test
   public void sellWithZeroAmount() {
-    assertThrows(IllegalArgumentException.class, () -> Sell.create("productId", 0));
+    assertThrows(IllegalArgumentException.class, () -> Sell.create(new ProductId("productId"), 0));
   }
 
   @Test
   public void sellWithNegativeAmount() {
-    assertThrows(IllegalArgumentException.class, () -> Sell.create("productId", -1));
+    assertThrows(IllegalArgumentException.class, () -> Sell.create(new ProductId("productId"), -1));
   }
 }

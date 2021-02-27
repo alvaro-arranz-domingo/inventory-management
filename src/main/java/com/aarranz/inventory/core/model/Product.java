@@ -7,22 +7,22 @@ import java.util.Set;
 
 public class Product {
 
-  private final String name;
+  private final ProductId name;
   private final Set<ArticleRequirement> articles;
 
-  public Product(String name, Set<ArticleRequirement> articles) {
+  public Product(ProductId name, Set<ArticleRequirement> articles) {
     this.name = name;
     this.articles = articles;
   }
 
-  public static Product create(String name, List<ArticleRequirement> articles) {
+  public static Product create(ProductId name, List<ArticleRequirement> articles) {
     checkNameNotNull(name);
     checkArticles(articles);
 
     return new Product(name, new HashSet<>(articles));
   }
 
-  public String name() {
+  public ProductId name() {
     return name;
   }
 
@@ -50,7 +50,7 @@ public class Product {
     articlesRequired().forEach(a -> a.removeArticles(quantity));
   }
 
-  public Optional<Integer> getStockOfArticleRequiredWithId(String articleId) {
+  public Optional<Integer> getStockOfArticleRequiredWithId(ArticleId articleId) {
     return articles.stream().filter(a -> a.article().id().equals(articleId)).map(a -> a.article().stock()).findFirst();
   }
 
@@ -65,7 +65,7 @@ public class Product {
     }
   }
 
-  private static void checkNameNotNull(String name) {
+  private static void checkNameNotNull(ProductId name) {
     if (name == null) {
       throw new IllegalArgumentException("The product should have a name different from null");
     }

@@ -1,6 +1,7 @@
 package com.aarranz.inventory.infrastructure.jpa;
 
 import com.aarranz.inventory.core.model.Product;
+import com.aarranz.inventory.core.model.ProductId;
 import com.aarranz.inventory.core.repositories.ProductRepository;
 import com.aarranz.inventory.infrastructure.jpa.mappers.ProductEntityMapper;
 import com.aarranz.inventory.infrastructure.jpa.springrepo.ArticleCRUDRepoSpring;
@@ -29,8 +30,8 @@ public class ProductJPARepository implements ProductRepository {
   }
 
   @Override
-  public Optional<Product> findByName(String name) {
-    return productCRUDRepo.findById(name).map(mapper::toDom);
+  public Optional<Product> findByName(ProductId name) {
+    return productCRUDRepo.findById(name.value()).map(mapper::toDom);
   }
 
   @Override

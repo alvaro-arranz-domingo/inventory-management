@@ -11,7 +11,7 @@ public class SellDTOMapper {
     var dto = new SellDTO();
     dto.id = sell.id();
     dto.amount = sell.amount();
-    dto.productId = sell.productId();
+    dto.productId = sell.productId().value();
     return dto;
   }
 }

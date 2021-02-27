@@ -9,7 +9,7 @@ public class ProductDTOMapper {
 
   public ProductDTO toDTO(Product product) {
     var dto = new ProductDTO();
-    dto.name = product.name();
+    dto.name = product.name().value();
     dto.stock = product.stock();
     return dto;
   }

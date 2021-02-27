@@ -20,12 +20,12 @@ class ProductTest {
 
   @Test
   public void productRequierementsNotNull() {
-    assertThrows(IllegalArgumentException.class, () -> Product.create("anyName", null ));
+    assertThrows(IllegalArgumentException.class, () -> Product.create(new ProductId("anyName"), null ));
   }
 
   @Test
   public void productShouldHaveAtLeastOneArticleRequirement() {
-    assertThrows(IllegalArgumentException.class, () -> Product.create("anyName", new ArrayList<>()));
+    assertThrows(IllegalArgumentException.class, () -> Product.create(new ProductId("anyName"), new ArrayList<>()));
   }
 
   @Test
@@ -33,7 +33,7 @@ class ProductTest {
     var articleGroupA = ArticleGroupMother.anyGroupWith("1", 3, 1);
     var articleGroupB = ArticleGroupMother.anyGroupWith("1", 5, 2);
 
-    assertThrows(IllegalArgumentException.class, () -> Product.create("anyName", Arrays.asList(articleGroupA, articleGroupB)));
+    assertThrows(IllegalArgumentException.class, () -> Product.create(new ProductId("anyName"), Arrays.asList(articleGroupA, articleGroupB)));
   }
 
   @Test

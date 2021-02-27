@@ -1,5 +1,6 @@
 package com.aarranz.inventory.core.usecases;
 
+import com.aarranz.inventory.core.model.ProductId;
 import com.aarranz.inventory.core.model.exceptions.NotEnoughStockForArticleException;
 import com.aarranz.inventory.core.model.exceptions.ProductNotFoundException;
 import com.aarranz.inventory.core.model.Product;
@@ -20,7 +21,7 @@ public class SellProductUC {
     this.transactionProvider = transactionProvider;
   }
 
-  public Sell sell(int quantity, String productName) {
+  public Sell sell(int quantity, ProductId productName) {
 
     var product = findProduct(productName);
     checkStock(product, quantity);
@@ -37,7 +38,7 @@ public class SellProductUC {
     }
   }
 
-  private Product findProduct(String productName) {
+  private Product findProduct(ProductId productName) {
     var productOp = products.findByName(productName);
 
     if (productOp.isEmpty()) {

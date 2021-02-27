@@ -1,5 +1,6 @@
 package com.aarranz.inventory.infrastructure.jpa;
 
+import com.aarranz.inventory.core.model.ProductId;
 import com.aarranz.inventory.core.model.Sell;
 import com.aarranz.inventory.infrastructure.jpa.springrepo.SellsCRUDRepoSpring;
 import com.aarranz.inventory.mother.ArticleGroupMother;
@@ -29,13 +30,13 @@ public class SellJPARepositoryTest {
         "product1",
         ArticleGroupMother.anyGroupWith("1", 5, 2),
         ArticleGroupMother.anyGroupWith("2", 7, 3)));
-    var sell = Sell.create("product1", 5);
+    var sell = Sell.create(new ProductId("product1"), 5);
 
     var createdSell = sells.save(sell);
 
     assertNotNull(createdSell);
     assertNotNull(createdSell.id());
-    assertEquals("product1", createdSell.productId());
+    assertEquals("product1", createdSell.productId().value());
     assertEquals(5, createdSell.amount());
     assertTrue(springRepo.existsById(createdSell.id()));
   }
@@ -46,7 +47,7 @@ public class SellJPARepositoryTest {
         "product1",
         ArticleGroupMother.anyGroupWith("1", 5, 2),
         ArticleGroupMother.anyGroupWith("2", 7, 3)));
-    var sell = sells.save(Sell.create("product1", 5));
+    var sell = sells.save(Sell.create(new ProductId("product1"), 5));
 
     var sellFoundOp = sells.findById(sell.id());
 

@@ -3,16 +3,16 @@ package com.aarranz.inventory.core.model;
 public class Sell {
 
   private final Long id;
-  private final String productId;
+  private final ProductId productId;
   private final int amount;
 
-  public Sell(Long id, String productId, int amount) {
+  public Sell(Long id, ProductId productId, int amount) {
     this.id = id;
     this.productId = productId;
     this.amount = amount;
   }
 
-  static public Sell create(String productId, int amount) {
+  static public Sell create(ProductId productId, int amount) {
 
     checkProductIdNotNull(productId);
     checkAmountIsValid(amount);
@@ -24,7 +24,7 @@ public class Sell {
     return id;
   }
 
-  public String productId() {
+  public ProductId productId() {
     return productId;
   }
 
@@ -38,7 +38,7 @@ public class Sell {
     }
   }
 
-  private static void checkProductIdNotNull(String productId) {
+  private static void checkProductIdNotNull(ProductId productId) {
     if (productId == null) {
       throw new IllegalArgumentException();
     }
