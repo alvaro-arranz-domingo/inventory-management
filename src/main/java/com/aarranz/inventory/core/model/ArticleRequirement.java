@@ -4,35 +4,35 @@ import java.util.Objects;
 
 public class ArticleRequirement {
 
-  private final Article article;
+  private final ArticleId articleId;
   private final int amount;
 
-  public ArticleRequirement(Article article, int amount) {
-    checkArticleNotNull(article);
-    checkAmount(amount);
+  public ArticleRequirement(ArticleId articleId, int amount) {
+    checkArticleNotNull(articleId);
+    checkAmountIsValid(amount);
 
-    this.article = article;
+    this.articleId = articleId;
     this.amount = amount;
   }
 
-  public Article article() {
-    return article;
+  public ArticleId articleId() {
+    return articleId;
   }
 
   public int amount() {
     return amount;
   }
 
-  public int stockOfGroup() {
-    return Math.floorDiv(article.stock(), amount);
+  private void checkAmountIsValid(int amount) {
+    if (amount <= 0) {
+      throw new IllegalArgumentException("Amount should be a positive value");
+    }
   }
 
-  public boolean hasStockFor(int quantity) {
-    return (quantity * amount) <= article.stock();
-  }
-
-  public void removeArticles(int quantity) {
-    article.reduceStockIn(quantity * amount);
+  private void checkArticleNotNull(ArticleId id) {
+    if (id == null) {
+      throw new IllegalArgumentException("ArticleId should not be null");
+    }
   }
 
   @Override
@@ -40,23 +40,11 @@ public class ArticleRequirement {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ArticleRequirement that = (ArticleRequirement) o;
-    return Objects.equals(article, that.article);
+    return Objects.equals(articleId, that.articleId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(article);
-  }
-
-  private void checkAmount(int amount) {
-    if (amount <= 0) {
-      throw new IllegalArgumentException("Amount should be a positive value");
-    }
-  }
-
-  private void checkArticleNotNull(Article article) {
-    if (article == null) {
-      throw new IllegalArgumentException("Article should not be null");
-    }
+    return Objects.hash(articleId);
   }
 }

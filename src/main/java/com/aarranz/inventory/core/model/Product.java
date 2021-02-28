@@ -8,50 +8,43 @@ import java.util.Set;
 public class Product {
 
   private final ProductId name;
+  private final Stock stock;
   private final Set<ArticleRequirement> articles;
 
-  public Product(ProductId name, Set<ArticleRequirement> articles) {
+  public Product(ProductId name, Stock stock, Set<ArticleRequirement> articles) {
     this.name = name;
+    this.stock = stock;
     this.articles = articles;
   }
 
-  public static Product create(ProductId name, List<ArticleRequirement> articles) {
-    checkNameNotNull(name);
+  public static Product create(ProductId name, Stock stock, List<ArticleRequirement> articles) {
+    checkNotNull(name);
+    checkNotNull(stock);
     checkArticles(articles);
 
-    return new Product(name, new HashSet<>(articles));
+    return new Product(name, stock, new HashSet<>(articles));
   }
 
   public ProductId name() {
     return name;
   }
 
-  public Iterable<ArticleRequirement> articlesRequired() {
+  public Stock stock() {
+    return stock;
+  }
+
+  public Iterable<ArticleRequirement> requiredArticles() {
     return articles;
   }
 
-  public int stock() {
-    var optMin = articles.stream()
-        .map(ArticleRequirement::stockOfGroup)
-        .mapToInt(i -> i)
-        .min();
-
-    if (optMin.isEmpty())
-      return 0;
-
-    return optMin.getAsInt();
+  public Optional<ArticleRequirement> getRequiredArticleById(ArticleId articleId) {
+    return articles.stream().filter(a -> a.articleId().equals(articleId)).findFirst();
   }
 
-  public boolean hasStockFor(int quantity) {
-    return !articles.stream().anyMatch(a -> !a.hasStockFor(quantity));
-  }
-
-  public void removeAmount(int quantity) {
-    articlesRequired().forEach(a -> a.removeArticles(quantity));
-  }
-
-  public Optional<Integer> getStockOfArticleRequiredWithId(ArticleId articleId) {
-    return articles.stream().filter(a -> a.article().id().equals(articleId)).map(a -> a.article().stock()).findFirst();
+  private static void checkNotNull(Object object) {
+    if (object == null) {
+      throw new IllegalArgumentException("The product should have a name different from null");
+    }
   }
 
   private static void checkArticles(List<ArticleRequirement> articles) {
@@ -62,12 +55,6 @@ public class Product {
 
     if (articles.stream().distinct().count() != articles.size()) {
       throw new IllegalArgumentException("The product cannot have a repeated article requirement");
-    }
-  }
-
-  private static void checkNameNotNull(ProductId name) {
-    if (name == null) {
-      throw new IllegalArgumentException("The product should have a name different from null");
     }
   }
 }

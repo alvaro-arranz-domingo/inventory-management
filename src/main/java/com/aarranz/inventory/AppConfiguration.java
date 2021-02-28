@@ -1,5 +1,6 @@
 package com.aarranz.inventory;
 
+import com.aarranz.inventory.core.repositories.ArticlesRepository;
 import com.aarranz.inventory.core.repositories.ProductRepository;
 import com.aarranz.inventory.core.repositories.SellRepository;
 import com.aarranz.inventory.core.transactional.TransactionProvider;
@@ -25,8 +26,9 @@ public class AppConfiguration {
   @Bean
   public SellProductUC sellProductUC(ProductRepository products,
                                      SellRepository sells,
+                                     ArticlesRepository articles,
                                      TransactionProvider transactionProvider) {
-    return new SellProductUC(products, sells, transactionProvider);
+    return new SellProductUC(products, articles, sells, transactionProvider);
   }
 
   @Bean

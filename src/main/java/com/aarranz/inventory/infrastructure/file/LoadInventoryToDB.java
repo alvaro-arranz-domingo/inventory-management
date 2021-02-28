@@ -1,5 +1,6 @@
 package com.aarranz.inventory.infrastructure.file;
 
+import com.aarranz.inventory.core.repositories.ArticlesRepository;
 import com.aarranz.inventory.core.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,9 @@ public class LoadInventoryToDB {
   private ProductRepository productsRepo;
 
   @Autowired
+  private ArticlesRepository articlesRepo;
+
+  @Autowired
   private LoadInventoryFromFile loadInventoryFromFile;
 
   public void loadToDB() throws IOException {
@@ -34,8 +38,12 @@ public class LoadInventoryToDB {
     var inventoryRes = new FileSystemResource(inventoryFile);
     var productsRes = new FileSystemResource(productsFile);
 
-    var products = loadInventoryFromFile.load(inventoryRes, productsRes);
+    var articles = loadInventoryFromFile.loadArticles(inventoryRes);
+    var products = loadInventoryFromFile.loadProducts(productsRes);
 
+    articlesRepo.saveAll(new HashSet<>(articles));
     productsRepo.saveAll(new HashSet<>(products));
+
+    productsRepo.updateAllProductsStock();
   }
 }

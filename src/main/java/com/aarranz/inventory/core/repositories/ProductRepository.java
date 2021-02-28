@@ -18,4 +18,10 @@ public interface ProductRepository {
   void save(Product product);
 
   void clearAll();
+
+  void updateAllProductsStock();
+
+  void updateProductStock(ProductId id);
+
+  List<ProductId> getProductsToBeUpdatedWhenSellProduct(ProductId id);
 }

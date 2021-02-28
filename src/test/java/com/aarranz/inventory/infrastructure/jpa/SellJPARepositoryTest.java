@@ -1,7 +1,6 @@
 package com.aarranz.inventory.infrastructure.jpa;
 
-import com.aarranz.inventory.core.model.ProductId;
-import com.aarranz.inventory.core.model.Sell;
+import com.aarranz.inventory.core.model.*;
 import com.aarranz.inventory.infrastructure.jpa.springrepo.SellsCRUDRepoSpring;
 import com.aarranz.inventory.mother.ArticleGroupMother;
 import com.aarranz.inventory.mother.ProductMother;
@@ -22,14 +21,18 @@ public class SellJPARepositoryTest {
   private ProductJPARepository products;
 
   @Autowired
+  private ArticlesJPARepository articles;
+
+  @Autowired
   private SellsCRUDRepoSpring springRepo;
 
   @Test
   public void saveSell() {
+    articles.save(Article.create(new ArticleId("1"), "articleTest1", 7));
     products.save(ProductMother.anyProductWithArticles(
         "product1",
-        ArticleGroupMother.anyGroupWith("1", 5, 2),
-        ArticleGroupMother.anyGroupWith("2", 7, 3)));
+        new Stock(3),
+        ArticleGroupMother.anyGroupWith("1", 2)));
     var sell = Sell.create(new ProductId("product1"), 5);
 
     var createdSell = sells.save(sell);
@@ -43,10 +46,11 @@ public class SellJPARepositoryTest {
 
   @Test
   public void findSell() {
+    articles.save(Article.create(new ArticleId("1"), "articleTest1", 7));
     products.save(ProductMother.anyProductWithArticles(
         "product1",
-        ArticleGroupMother.anyGroupWith("1", 5, 2),
-        ArticleGroupMother.anyGroupWith("2", 7, 3)));
+        new Stock(3),
+        ArticleGroupMother.anyGroupWith("1", 2)));
     var sell = sells.save(Sell.create(new ProductId("product1"), 5));
 
     var sellFoundOp = sells.findById(sell.id());

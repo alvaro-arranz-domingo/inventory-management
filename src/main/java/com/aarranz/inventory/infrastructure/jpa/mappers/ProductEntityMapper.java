@@ -15,38 +15,26 @@ public class ProductEntityMapper {
   public ProductEntity toEntity(Product product) {
     var entity = new ProductEntity();
     entity.name = product.name().value();
-    entity.productArticles = StreamSupport.stream(product.articlesRequired().spliterator(), false).map(a -> toEntity(entity, a)).collect(Collectors.toSet());
+    entity.stock = product.stock().value();
+    entity.productArticles = StreamSupport.stream(product.requiredArticles().spliterator(), false).map(a -> toEntity(entity, a)).collect(Collectors.toSet());
     return entity;
   }
 
   public Product toDom(ProductEntity entity) {
     var requirements = entity.productArticles.stream().map(this::toDom).collect(Collectors.toSet());
-    return new Product(new ProductId(entity.name), requirements);
+    return new Product(new ProductId(entity.name), new Stock(entity.stock), requirements);
   }
 
   private ProductArticlesEntity toEntity(ProductEntity productEntity, ArticleRequirement requirement) {
     var entity = new ProductArticlesEntity();
     entity.id.productId = productEntity.name;
-    entity.article = toEntity(requirement.article());
-    entity.id.articleId = entity.article.id;
+    entity.id.articleId = requirement.articleId().value();
     entity.product = productEntity;
     entity.amount = requirement.amount();
     return entity;
   }
 
   private ArticleRequirement toDom(ProductArticlesEntity entity) {
-    return new ArticleRequirement(toDom(entity.article), entity.amount);
-  }
-
-  private ArticleEntity toEntity(Article article) {
-    var entity = new ArticleEntity();
-    entity.id = article.id().value();
-    entity.name = article.name();
-    entity.stock = article.stock();
-    return entity;
-  }
-
-  private Article toDom(ArticleEntity entity) {
-    return new Article(new ArticleId(entity.id), entity.name, entity.stock);
+    return new ArticleRequirement(new ArticleId(entity.id.articleId), entity.amount);
   }
 }

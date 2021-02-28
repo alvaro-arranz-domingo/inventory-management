@@ -1,5 +1,9 @@
 package com.aarranz.inventory.infrastructure.rest;
 
+import com.aarranz.inventory.core.model.Article;
+import com.aarranz.inventory.core.model.ArticleId;
+import com.aarranz.inventory.core.model.Stock;
+import com.aarranz.inventory.core.repositories.ArticlesRepository;
 import com.aarranz.inventory.core.repositories.ProductRepository;
 import com.aarranz.inventory.infrastructure.rest.dto.ProductDTO;
 import com.aarranz.inventory.mother.ArticleGroupMother;
@@ -26,6 +30,9 @@ class GETProductsControllerTest {
 
   @Autowired
   private ProductRepository productsRepo;
+
+  @Autowired
+  private ArticlesRepository articlesRepo;
 
   @BeforeEach
   public void SetUp() {
@@ -69,12 +76,16 @@ class GETProductsControllerTest {
   }
 
   private void initDBWithTwoProducts() {
-    var article1 = ArticleGroupMother.anyGroupWith("1", 5, 2);
-    var article2 = ArticleGroupMother.anyGroupWith("2", 7, 3);
-    var article3 = ArticleGroupMother.anyGroupWith("3", 8, 1);
+    articlesRepo.save(Article.create(new ArticleId("1"), "article1", 7));
+    articlesRepo.save(Article.create(new ArticleId("2"), "article2", 3));
+    articlesRepo.save(Article.create(new ArticleId("3"), "article3", 12));
 
-    var product1 = ProductMother.anyProductWithArticles("product1", article1, article2);
-    var product2 = ProductMother.anyProductWithArticles("product2", article2, article3);
+    var article1 = ArticleGroupMother.anyGroupWith("1",  2);
+    var article2 = ArticleGroupMother.anyGroupWith("2",  3);
+    var article3 = ArticleGroupMother.anyGroupWith("3",  1);
+
+    var product1 = ProductMother.anyProductWithArticles("product1", new Stock(5), article1, article2);
+    var product2 = ProductMother.anyProductWithArticles("product2", new Stock(2), article2, article3);
     var allProducts = new HashSet<>(Arrays.asList(product1, product2));
 
     productsRepo.saveAll(allProducts);

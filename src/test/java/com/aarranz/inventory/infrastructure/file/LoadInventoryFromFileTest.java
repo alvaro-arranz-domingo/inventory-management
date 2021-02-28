@@ -1,5 +1,7 @@
 package com.aarranz.inventory.infrastructure.file;
 
+import com.aarranz.inventory.core.model.ProductId;
+import com.aarranz.inventory.core.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,10 +26,12 @@ class LoadInventoryFromFileTest {
     var inventoryResource = new ClassPathResource("inventory.json");
     var productsResource = new ClassPathResource("products.json");
 
-    var products = loadInventoryFromFile.load(inventoryResource, productsResource);
+    var products = loadInventoryFromFile.loadProducts(productsResource);
+    var articles = loadInventoryFromFile.loadArticles(inventoryResource);
 
     assertNotNull(products);
     assertEquals(2, products.size());
+    assertNotNull(articles);
+    assertEquals(4, articles.size());
   }
-
 }

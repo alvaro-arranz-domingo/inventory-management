@@ -1,9 +1,12 @@
 package com.aarranz.inventory.infrastructure.rest;
 
+import com.aarranz.inventory.core.model.*;
+import com.aarranz.inventory.core.repositories.ArticlesRepository;
 import com.aarranz.inventory.core.repositories.ProductRepository;
 import com.aarranz.inventory.infrastructure.jpa.springrepo.SellsCRUDRepoSpring;
 import com.aarranz.inventory.infrastructure.rest.dto.SellDTO;
 import com.aarranz.inventory.mother.ArticleGroupMother;
+import com.aarranz.inventory.mother.ArticleMother;
 import com.aarranz.inventory.mother.ProductMother;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +30,9 @@ public class POSTSellControllerTest {
   private ProductRepository products;
 
   @Autowired
+  private ArticlesRepository articles;
+
+  @Autowired
   private SellsCRUDRepoSpring sells;
 
   @BeforeEach
@@ -36,17 +42,19 @@ public class POSTSellControllerTest {
 
   @Test
   public void sell() {
+    articles.save(Article.create(new ArticleId("1"), "articleName1", 11));
+    articles.save(Article.create(new ArticleId("2"), "articleName2", 18));
     var product = ProductMother.anyProductWithArticles(
         "product1",
-        ArticleGroupMother.anyGroupWith("1", 5, 2),
-        ArticleGroupMother.anyGroupWith("2", 8, 3));
+        new Stock(5),
+        ArticleGroupMother.anyGroupWith("1",  2),
+        ArticleGroupMother.anyGroupWith("2",  3));
     products.save(product);
-    var sellRequest = createSellDTO("product1", 2);
 
     var sell = client
         .post()
           .uri("/sell")
-          .bodyValue(sellRequest)
+          .bodyValue(createSellDTO("product1", 2))
         .exchange()
         .expectStatus()
           .isOk()
@@ -57,16 +65,20 @@ public class POSTSellControllerTest {
     assertEquals("product1", sell.productId);
     assertEquals(2, sell.amount);
     assertTrue(sells.existsById(sell.id));
+    assertEquals(3, products.findByName(new ProductId("product1")).get().stock().value());
+    assertEquals(7, articles.findById(new ArticleId("1")).get().stock());
+    assertEquals(12, articles.findById(new ArticleId("2")).get().stock());
   }
 
   @Test
   public void sellUnknownProduct() {
-    var sell = createSellDTO("unknown", 2);
+    articles.save(Article.create(new ArticleId("1"), "articleTest1",15));
+    products.save(ProductMother.anyProductWithArticles("product1", new Stock(5), ArticleGroupMother.anyGroupWith("1", 1)));
 
     client
         .post()
           .uri("/sell")
-          .bodyValue(sell)
+          .bodyValue(createSellDTO("unknown", 2))
         .exchange()
           .expectStatus()
           .isNotFound();
@@ -74,17 +86,18 @@ public class POSTSellControllerTest {
 
   @Test
   public void sellInvalidAmount() {
+    articles.save(Article.create(new ArticleId("1"), "articleName1", 11));
+    articles.save(Article.create(new ArticleId("2"), "articleName1", 14));
     var product = ProductMother.anyProductWithArticles(
         "product1",
-        ArticleGroupMother.anyGroupWith("1", 5, 2),
-        ArticleGroupMother.anyGroupWith("2", 8, 3));
+        ArticleGroupMother.anyGroupWith("1", 2),
+        ArticleGroupMother.anyGroupWith("2", 3));
     products.save(product);
-    var sell = createSellDTO("product1", -2);
 
     client
         .post()
           .uri("/sell")
-          .bodyValue(sell)
+          .bodyValue(createSellDTO("product1", -2))
         .exchange()
           .expectStatus()
           .isBadRequest();
@@ -92,12 +105,15 @@ public class POSTSellControllerTest {
 
   @Test
   public void sellMoreThanAvailable() {
+    articles.save(Article.create(new ArticleId("1"), "articleName1", 11));
+    articles.save(Article.create(new ArticleId("2"), "articleName1", 18));
     var product = ProductMother.anyProductWithArticles(
         "product1",
-        ArticleGroupMother.anyGroupWith("1", 5, 2),
-        ArticleGroupMother.anyGroupWith("2", 8, 3));
+        new Stock(5),
+        ArticleGroupMother.anyGroupWith("1", 2),
+        ArticleGroupMother.anyGroupWith("2", 3));
     products.save(product);
-    var sell = createSellDTO("product1", 5);
+    var sell = createSellDTO("product1", 8);
 
     client
         .post()
