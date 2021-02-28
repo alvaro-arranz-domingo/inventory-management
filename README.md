@@ -29,6 +29,8 @@ the availability of its components and calculate it dynamically. When a product 
 components is reduced, and the next users querying about the stock of the product immediately get the new
 stock state.
 
+![Solution1DBDiagram](images/solution1DbDiagram.png)
+
 The main advantage of this solution is that
 - The stock information is consistent. The stock of the products is dynamically calculated based on the stock of its component, 
   therefore there is only one source of information (the stock of the articles).
